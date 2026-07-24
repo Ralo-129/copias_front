@@ -9,7 +9,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const rol = localStorage.getItem('rol');
-        if (!rol) {
+        if (rol !== 'admin') {
             router.push('/login');
             return;
         }

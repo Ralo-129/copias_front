@@ -19,7 +19,13 @@ export default function LoginPage() {
 
         if (data.ok) {
             localStorage.setItem('rol', data.rol);
-            router.push('/dashboard');
+            if (data.rol === 'admin') {
+                router.push('/dashboard');
+            } else if (data.rol === 'profesor') {
+                router.push('/subir');
+            } else {
+                setResultado('Rol no reconocido');
+            }
         } else {
             setResultado('Usuario o contraseña incorrectos');
         }
