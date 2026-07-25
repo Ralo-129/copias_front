@@ -19,6 +19,7 @@ export default function LoginPage() {
 
         if (data.ok) {
             localStorage.setItem('rol', data.rol);
+            localStorage.setItem('nombre', data.nombre);
             if (data.rol === 'admin') {
                 router.push('/dashboard');
             } else if (data.rol === 'profesor') {
