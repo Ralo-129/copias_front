@@ -25,7 +25,13 @@ export default function Dashboard() {
             <ul>
                 {impresiones.map((item, index) => (
                     <li key={index}>
-                        {item.profesor} - {item.seccion} - {item.hora} - {item.descripcion}
+                        {item.profesor} - {item.seccion} - {new Date(item.createdAt).toLocaleString()} - {item.descripcion} 
+                        {' '}
+                        
+                        <a href={process.env.NEXT_PUBLIC_API_BASE_URL + '/uploads/' + item.archivo}
+                        >
+                        Descargar
+                        </a>
                     </li>
                 ))}
             </ul>

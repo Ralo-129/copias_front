@@ -24,10 +24,13 @@ export default function Subir() {
             return;
         }
 
+        const nombreProfesor = localStorage.getItem('nombre') ?? 'Desconocido';
+
         const formData = new FormData();
         formData.append('archivo', archivo);
         formData.append('seccion', seccion);
         formData.append('descripcion', descripcion);
+        formData.append('profesor', nombreProfesor);
 
         const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/subir', {
             method: 'POST',
