@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 
 export default function Subir() {
     const router = useRouter();
-    const [seccion, setSeccion] = useState('');
+
     const [descripcion, setDescripcion] = useState('');
     const [archivo, setArchivo] = useState<File | null>(null);
     const [resultado, setResultado] = useState('');
+    const [grado, setGrado] = useState('');
+    const [seccion, setSeccion] = useState('');
 
     useEffect(() => {
         const rol = localStorage.getItem('rol');
@@ -16,6 +18,9 @@ export default function Subir() {
             router.push('/login');
             return;
         }
+
+        setGrado(localStorage.getItem('grado') ?? '');
+        setSeccion(localStorage.getItem('seccion') ?? '');
     }, []);
 
     async function handleSubir() {
@@ -28,6 +33,7 @@ export default function Subir() {
 
         const formData = new FormData();
         formData.append('archivo', archivo);
+        formData.append('grado', grado);
         formData.append('seccion', seccion);
         formData.append('descripcion', descripcion);
         formData.append('profesor', nombreProfesor);
@@ -43,11 +49,7 @@ export default function Subir() {
     return (
         <main>
             <h1>Subir archivo para impresion</h1>
-            <input
-                placeholder= "Seccion (ej: 1A)"
-                value={seccion}
-                onChange={(e) => setSeccion(e.target.value)}
-            />
+            <p>Grado: {grado} - Sección: {seccion}</p>
             <textarea
                 placeholder="Descripcion (ej: 10 copias, doble cara)"
                 value={descripcion}

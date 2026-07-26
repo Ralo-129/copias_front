@@ -18,8 +18,12 @@ export default function LoginPage() {
         const data = await res.json();
 
         if (data.ok) {
+
             localStorage.setItem('rol', data.rol);
             localStorage.setItem('nombre', data.nombre);
+            localStorage.setItem('grado', data.grado ?? '');
+            localStorage.setItem('seccion', data.seccion ?? '');
+
             if (data.rol === 'admin') {
                 router.push('/dashboard');
             } else if (data.rol === 'profesor') {
