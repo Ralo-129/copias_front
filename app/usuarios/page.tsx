@@ -14,6 +14,10 @@ export default function Usuarios() {
     const [seccion, setSeccion] = useState('');
     const [resultado, setResultado] = useState('');
 
+    const [editandoId, setEditandoId] = useState<string | null>(null);
+    const [editGrado, setEditGrado] = useState('');
+    const [editSeccion, setEditSeccion] = useState('');
+
     function cargarUsuarios() {
         fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/usuarios')
             .then(res => res.json())
@@ -28,7 +32,7 @@ export default function Usuarios() {
         }
 
         cargarUsuarios();
-    } , []);
+    }, []);
 
     async function handleCrearProfesor() {
         const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/registro', {
@@ -40,8 +44,8 @@ export default function Usuarios() {
                 nombre: nombre.trim(),
                 rol: 'profesor',
                 grado: grado.trim(),
-                seccion: seccion.trim()
-            })
+                seccion: seccion.trim(),
+            }),
         });
         const data = await res.json();
 
@@ -54,18 +58,64 @@ export default function Usuarios() {
             setSeccion('');
             cargarUsuarios();
         } else {
-            setResultado('Error al crear el profesor')
+            setResultado('Error al crear el profesor');
         }
+    }
+
+    async function handleToggleActivo(id: string) {
+        await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/usuarios/' + id + '/toggle-activo', {
+            method: 'POST',
+        });
+        cargarUsuarios();
+    }
+
+    function abrirEdicion(item: any) {
+        setEditandoId(item._id);
+        setEditGrado(item.grado ?? '');
+        setEditSeccion(item.seccion ?? '');
+    }
+
+    async function guardarEdicion(id: string) {
+        await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/usuarios/' + id + '/editar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                grado: editGrado.trim(),
+                seccion: editSeccion.trim(),
+            }),
+        });
+        setEditandoId(null);
+        cargarUsuarios();
     }
 
     return (
         <main>
             <h1>Usuarios</h1>
+
             <ul>
                 {usuarios.map((item, index) => (
-                    <li  key={index}>
-                        
-                        {item.nombre} - {item.usuario} - {item.rol} - Grado; {item.grado ?? '-'} - Seccion: {item.seccion ?? '-'} 
+                    <li key={index}>
+                        {item.nombre} - {item.usuario} - {item.rol} - Grado: {item.grado ?? '-'} - Sección: {item.seccion ?? '-'} - {item.activo ? 'Activo' : 'Deshabilitado'}
+
+                        {item.rol === 'profesor' && (
+                            <>
+                                {' '}
+                                <button onClick={() => handleToggleActivo(item._id)}>
+                                    {item.activo ? 'Deshabilitar' : 'Habilitar'}
+                                </button>
+                                {' '}
+                                <button onClick={() => abrirEdicion(item)}>Editar</button>
+
+                                {editandoId === item._id && (
+                                    <div>
+                                        <input placeholder="Grado" value={editGrado} onChange={(e) => setEditGrado(e.target.value)} />
+                                        <input placeholder="Sección" value={editSeccion} onChange={(e) => setEditSeccion(e.target.value)} />
+                                        <button onClick={() => guardarEdicion(item._id)}>Guardar</button>
+                                        <button onClick={() => setEditandoId(null)}>Cancelar</button>
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </li>
                 ))}
             </ul>
