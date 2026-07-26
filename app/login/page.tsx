@@ -32,7 +32,7 @@ export default function LoginPage() {
                 setResultado('Rol no reconocido');
             }
         } else {
-            setResultado('Usuario o contraseña incorrectos');
+            setResultado(data.mensaje ?? 'Usuario o contraseña incorrectos');
         }
     }
 
