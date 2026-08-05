@@ -8,6 +8,12 @@ export default function Dashboard() {
     const [impresiones, setImpresiones] = useState<any[]>([]);
     const [filtroSeccion, setFiltroSeccion] = useState('todas');
 
+    function cargarImpresiones() {
+        fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones')
+            .then(res => res.json())
+            .then(data => setImpresiones(data));
+    }
+
     useEffect(() => {
         const rol = localStorage.getItem('rol');
         if (rol !== 'admin') {
@@ -15,10 +21,16 @@ export default function Dashboard() {
             return;
         }
 
-        fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones')
-            .then(res => res.json())
-            .then(data => setImpresiones(data));
+        cargarImpresiones();
     }, []);
+
+    async function handleToggleCompletado(id: string) {
+        await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones/' + id + '/toggle-completado', {
+            method: 'POST',
+        });
+
+        cargarImpresiones();
+    }
 
     const secciones = Array.from(
         new Set(impresiones.map((item) => `${item.grado}${item.seccion}`))
@@ -45,6 +57,8 @@ export default function Dashboard() {
                 {impresionesFiltradas.map((item, index) => (
                     <li key={index}>
                         {item.profesor} - {item.grado}{item.seccion} - {new Date(item.createdAt).toLocaleString()} - {item.descripcion}
+                        {' — '}
+                        {item.completado ? 'Completado' : 'Pendiente'}
                         {' '}
                         
                         <a href={process.env.NEXT_PUBLIC_API_BASE_URL + '/uploads/' + item.archivo} 
@@ -52,6 +66,10 @@ export default function Dashboard() {
                         >
                             Descargar
                         </a>
+                        {' '}
+                        <button onClick={() => handleToggleCompletado(item._id)}>
+                            {item.completado ? 'Reabrir' : 'Listo'}
+                        </button>
                     </li>
                 ))}
             </ul>
