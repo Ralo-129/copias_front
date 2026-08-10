@@ -101,7 +101,7 @@ function HistoryItem({ item }: { item: Impresion }) {
     const ext = getExtension(item.archivo);
 
     return (
-        <a href={process.env.NEXT_PUBLIC_API_URL + '/uploads/' + item.archivo}
+        <a href={process.env.NEXT_PUBLIC_API_BASE_URL + '/uploads/' + item.archivo}
             target="_blank"
             className="w-full text-left p-5 sm:p-6 hover:bg-muted/30 transition-colors group flex items-center gap-4"
         >
