@@ -25,13 +25,13 @@ export default function Dashboard() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
     function cargarImpresiones() {
-        fetch(process.env.NEXT_PUBLIC_API_URL + '/impresiones')
+        fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones')
           .then(res => res.json())
           .then(data => setImpresiones(data));
     }
 
     function cargarUsuarios() {
-        fetch(process.env.NEXT_PUBLIC_API_URL + '/usuarios')
+        fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/usuarios')
           .then(res => res.json())
           .then(data => setUsuarios(data));
     }
@@ -52,14 +52,14 @@ export default function Dashboard() {
     }
 
     async function handleToggleCompletado(id: string) {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + '/impresiones/' + id + '/toggle-completado', {
+        await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones/' + id + '/toggle-completado', {
             method: 'POST',
         });
         cargarImpresiones();
     }
 
     async function handleCrearProfesor(data: { usuario: string; password: string; nombre: string; grado: string; seccion: string }) {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'registro', {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + 'registro', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),

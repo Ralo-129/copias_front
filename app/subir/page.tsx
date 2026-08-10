@@ -27,7 +27,7 @@ export default function Subir() {
     const [impresiones, setImpresiones] = useState<Impresion[]>([]);
 
     function cargarMisImpresiones(nombreProfesor: string) {
-        fetch(process.env.NEXT_PUBLIC_API_URL + '/impresiones')
+        fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/impresiones')
         .then(res => res.json())
         .then((data: Impresion[]) => {
             setImpresiones(data.filter((item) => item.profesor === nombreProfesor));
