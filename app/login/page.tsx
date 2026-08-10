@@ -103,6 +103,7 @@ function LoginForm({ onForgot }: { onForgot: () => void }) {
                             autoComplete="username"
                             autoFocus
                             required
+                            className="border-2 border-gray-300 bg-white rounded-lg"
                         />
                     </div>
 
@@ -118,6 +119,7 @@ function LoginForm({ onForgot }: { onForgot: () => void }) {
                             onChange={(e) => setPassword(e.target.value)}
                             autoComplete="current-password"
                             required
+                            className="border-2 border-gray-300 bg-white rounded-lg"
                         />
                     </div>
 
